@@ -161,7 +161,7 @@ function App() {
         <section id="contact" className="mt-10">
           <div className="bg-white rounded-lg shadow-lg flex flex-col items-center ">
             <h2 className="text-4xl font-bold text-center mb-10">تواصل معنا</h2>
-            <form action="https://formsubmit.co/elqanony777@email.com" method="POST"
+            <form action="https://usebasin.com/f/d17aac440072" method="POST"
               className="flex flex-col items-center justify-center gap-4 w-full md:w-[500px]"
             >
               <div className="w-full">
