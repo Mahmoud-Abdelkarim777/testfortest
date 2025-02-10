@@ -161,14 +161,17 @@ function App() {
         <section id="contact" className="mt-10">
           <div className="bg-white rounded-lg shadow-lg flex flex-col items-center ">
             <h2 className="text-4xl font-bold text-center mb-10">تواصل معنا</h2>
-            <form action="https://usebasin.com/f/d17aac440072" method="POST"
+            <form
+              action="https://formbold.com/s/9BmaP"
+              method="POST"
               className="flex flex-col items-center justify-center gap-4 w-full md:w-[500px]"
             >
+              <input type="hidden" name="_gotcha" style={{ display: "none" }} />
+
               <div className="w-full">
                 <input
                   type="text"
                   name="name"
-                  
                   className="flex w-full rounded-lg border bg-secondary px-3 py-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="الاسم بالكامل"
                   required
@@ -178,7 +181,6 @@ function App() {
                 <input
                   type="number"
                   name="phone"
-                  
                   className="flex w-full rounded-lg border bg-secondary px-3 py-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="رقم الجوال"
                   required
@@ -188,7 +190,6 @@ function App() {
                 <input
                   type="email"
                   name="email"
-                  
                   className="flex w-full rounded-lg border bg-secondary px-3 py-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="البريد الإلكتروني"
                   required
@@ -197,7 +198,6 @@ function App() {
               <div className="w-full">
                 <textarea
                   name="message"
-                  
                   className="flex min-h-[80px] w-full rounded-lg border bg-secondary p-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="اكتب رسالتك هنا"
                   required
