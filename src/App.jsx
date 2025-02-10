@@ -10,40 +10,37 @@ function App() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const sendEmail = async (e) => {
-    e.preventDefault();
-  
-    const data = {
-      fullName,
-      phone,
-      email,
-      message,
-    };
-  
-    try {
-      const response = await axios.post("https://api.resend.com/emails", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
-      console.log(response.data);
-  
-      if (response.data.id) {
-        alert("تم إرسال الرسالة بنجاح");
-        setFullName("");
-        setPhone("");
-        setEmail("");
-        setMessage("");
-      } else {
-        alert("حدث خطأ أثناء إرسال الرسالة");
-      }
-    } catch (error) {
-      console.error("Error sending contact request:", error);
-      alert("تعذر إرسال الرسالة، يرجى المحاولة لاحقًا.");
-    }
+
+const sendEmail = async (e) => {
+  e.preventDefault();
+
+  const data = {
+    fullName,
+    phone,
+    email,
+    message,
   };
-  
+
+  try {
+    const response = await axios.post("/.netlify/functions/sendEmail", data);
+
+    console.log(response.data);
+
+    if (response.data.id) {
+      alert("تم إرسال الرسالة بنجاح");
+      setFullName("");
+      setPhone("");
+      setEmail("");
+      setMessage("");
+    } else {
+      alert("حدث خطأ أثناء إرسال الرسالة");
+    }
+  } catch (error) {
+    console.error("Error sending contact request:", error);
+    alert("تعذر إرسال الرسالة، يرجى المحاولة لاحقًا.");
+  }
+};
+
   
   
   return (
