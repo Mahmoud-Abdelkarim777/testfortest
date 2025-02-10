@@ -1,6 +1,18 @@
 import fetch from 'node-fetch';
 
 export const handler = async (event) => {
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+      body: "",
+    };
+  }
+
   try {
     const { fullName, phone, email, message } = JSON.parse(event.body);
 
@@ -25,12 +37,18 @@ export const handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*", // ✅ حل مشكلة CORS
+      },
       body: JSON.stringify(result),
     };
   } catch (error) {
     console.error("Error sending email:", error);
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
       body: JSON.stringify({ error: "Failed to send email" }),
     };
   }
