@@ -1,49 +1,9 @@
 import logo from "./assets/image/logo.jpg";
 import "./App.css";
 import { useState } from "react";
-import axios from "axios";
 
 function App() {
   const [toggleMenu, setToggleMenu] = useState(false);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    message: "",
-  });
-
-  const [status, setStatus] = useState("");
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus("جارٍ الإرسال...");
-
-    try {
-      const response = await axios.post(
-        "/.netlify/functions/sendEmail",
-        formData
-      );
-      console.log(response);
-      
-      if (response.data.success) {
-        console.log(response);
-        setStatus("تم إرسال الرسالة بنجاح!");
-
-        setFormData({ name: "", phone:"" ,email: "", message: "" }); // إعادة تعيين الفورم
-      } else {
-        console.log(response);
-        setStatus("حدث خطأ أثناء الإرسال.");
-      }
-    } catch (error) {
-      setStatus("فشل الإرسال، حاول مرة أخرى.");
-      console.error(error);
-    }
-  };
 
   return (
     <>
@@ -203,14 +163,12 @@ function App() {
             <h2 className="text-4xl font-bold text-center mb-10">تواصل معنا</h2>
             <form action="https://formsubmit.co/elqanony777@email.com" method="POST"
               className="flex flex-col items-center justify-center gap-4 w-full md:w-[500px]"
-              onSubmit={handleSubmit}
             >
               <div className="w-full">
                 <input
                   type="text"
                   name="name"
-                  value={formData.name}
-                  onChange={handleChange}
+                  
                   className="flex w-full rounded-lg border bg-secondary px-3 py-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="الاسم بالكامل"
                   required
@@ -220,8 +178,7 @@ function App() {
                 <input
                   type="number"
                   name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
+                  
                   className="flex w-full rounded-lg border bg-secondary px-3 py-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="رقم الجوال"
                   required
@@ -231,8 +188,7 @@ function App() {
                 <input
                   type="email"
                   name="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  
                   className="flex w-full rounded-lg border bg-secondary px-3 py-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="البريد الإلكتروني"
                   required
@@ -241,8 +197,7 @@ function App() {
               <div className="w-full">
                 <textarea
                   name="message"
-                  value={formData.message}
-                  onChange={handleChange}
+                  
                   className="flex min-h-[80px] w-full rounded-lg border bg-secondary p-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="اكتب رسالتك هنا"
                   required
@@ -255,7 +210,6 @@ function App() {
               >
                 إرسال الرسالة
               </button>
-              <p>{status}</p>
             </form>
           </div>
         </section>
