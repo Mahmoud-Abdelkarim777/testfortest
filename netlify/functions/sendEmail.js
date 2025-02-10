@@ -20,6 +20,7 @@ export async function handler(event) {
       reply_to: email,
       text: `الاسم: ${name}\nالإيميل: ${email}\n\nالرسالة:\n${message}`,
     });
+    
 
     return {
       statusCode: 200,

@@ -28,10 +28,15 @@ function App() {
         "/.netlify/functions/sendEmail",
         formData
       );
+      console.log(response);
+      
       if (response.data.success) {
+        console.log(response);
         setStatus("تم إرسال الرسالة بنجاح!");
-        setFormData({ name: "", email: "", message: "" }); // إعادة تعيين الفورم
+
+        setFormData({ name: "", phone:"" ,email: "", message: "" }); // إعادة تعيين الفورم
       } else {
+        console.log(response);
         setStatus("حدث خطأ أثناء الإرسال.");
       }
     } catch (error) {
