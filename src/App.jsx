@@ -3,46 +3,43 @@ import "./App.css";
 import { useState } from "react";
 import axios from "axios";
 
-
 function App() {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
 
-const sendEmail = async (e) => {
-  e.preventDefault();
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    message: "",
+  });
 
-  const data = {
-    fullName,
-    phone,
-    email,
-    message,
+  const [status, setStatus] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  try {
-    const response = await axios.post("/.netlify/functions/sendEmail", data);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("جارٍ الإرسال...");
 
-    console.log(response.data);
-
-    if (response.data.id) {
-      alert("تم إرسال الرسالة بنجاح");
-      setFullName("");
-      setPhone("");
-      setEmail("");
-      setMessage("");
-    } else {
-      alert("حدث خطأ أثناء إرسال الرسالة");
+    try {
+      const response = await axios.post(
+        "/.netlify/functions/sendEmail",
+        formData
+      );
+      if (response.data.success) {
+        setStatus("تم إرسال الرسالة بنجاح!");
+        setFormData({ name: "", email: "", message: "" }); // إعادة تعيين الفورم
+      } else {
+        setStatus("حدث خطأ أثناء الإرسال.");
+      }
+    } catch (error) {
+      setStatus("فشل الإرسال، حاول مرة أخرى.");
+      console.error(error);
     }
-  } catch (error) {
-    console.error("Error sending contact request:", error);
-    alert("تعذر إرسال الرسالة، يرجى المحاولة لاحقًا.");
-  }
-};
+  };
 
-  
-  
   return (
     <>
       {/* <!-- start header sextion  --> */}
@@ -116,8 +113,11 @@ const sendEmail = async (e) => {
             </ul>
           </div>
           <div className="flex lg:hidden">
-            <button id="toggleOpen" className="lg:hidden"
-            onClick={() => setToggleMenu(!toggleMenu)}>
+            <button
+              id="toggleOpen"
+              className="lg:hidden"
+              onClick={() => setToggleMenu(!toggleMenu)}
+            >
               <svg
                 className="w-7 h-7"
                 fill="#000"
@@ -196,14 +196,16 @@ const sendEmail = async (e) => {
         <section id="contact" className="mt-10">
           <div className="bg-white rounded-lg shadow-lg flex flex-col items-center ">
             <h2 className="text-4xl font-bold text-center mb-10">تواصل معنا</h2>
-            <form className="flex flex-col items-center justify-center gap-4 w-full md:w-[500px]"
-            onSubmit={(e) => sendEmail(e)}>
+            <form
+              className="flex flex-col items-center justify-center gap-4 w-full md:w-[500px]"
+              onSubmit={handleSubmit}
+            >
               <div className="w-full">
                 <input
                   type="text"
                   name="name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  value={formData.name}
+                  onChange={handleChange}
                   className="flex w-full rounded-lg border bg-secondary px-3 py-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="الاسم بالكامل"
                   required
@@ -213,8 +215,8 @@ const sendEmail = async (e) => {
                 <input
                   type="number"
                   name="phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  value={formData.phone}
+                  onChange={handleChange}
                   className="flex w-full rounded-lg border bg-secondary px-3 py-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="رقم الجوال"
                   required
@@ -224,8 +226,8 @@ const sendEmail = async (e) => {
                 <input
                   type="email"
                   name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleChange}
                   className="flex w-full rounded-lg border bg-secondary px-3 py-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="البريد الإلكتروني"
                   required
@@ -234,8 +236,8 @@ const sendEmail = async (e) => {
               <div className="w-full">
                 <textarea
                   name="message"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  value={formData.message}
+                  onChange={handleChange}
                   className="flex min-h-[80px] w-full rounded-lg border bg-secondary p-3 text-lg focus-visible:outline-1 outline-cyan-500"
                   placeholder="اكتب رسالتك هنا"
                   required
@@ -248,6 +250,7 @@ const sendEmail = async (e) => {
               >
                 إرسال الرسالة
               </button>
+              <p>{status}</p>
             </form>
           </div>
         </section>
@@ -271,8 +274,8 @@ const sendEmail = async (e) => {
       {/* <!-- start footer section  --> */}
       <footer className=" bg-main py-8 mt-10 ">
         <p className="container px-3 mx-auto text-sm md:text-2xl text-center">
-          جميع الحقوق محفوظة © <span id="year">{new Date().getFullYear()}</span> المركز المتخصص
-          السعودي للتحكيم
+          جميع الحقوق محفوظة © <span id="year">{new Date().getFullYear()}</span>{" "}
+          المركز المتخصص السعودي للتحكيم
         </p>
       </footer>
       {/* <!-- end footer section  --> */}

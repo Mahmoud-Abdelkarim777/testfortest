@@ -1,55 +1,34 @@
-import fetch from 'node-fetch';
+import { Resend } from 'resend';
 
-export const handler = async (event) => {
-  if (event.httpMethod === "OPTIONS") {
+export async function handler(event) {
+  if (event.httpMethod !== 'POST') {
     return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-      body: "",
+      statusCode: 405,
+      body: JSON.stringify({ error: 'Method Not Allowed' }),
     };
   }
 
   try {
-    const { fullName, phone, email, message } = JSON.parse(event.body);
+    const { name, email, message } = JSON.parse(event.body);
 
-    const data = {
-      from: "noreply@yourdomain.com", // استخدم بريد نطاق خاص بك
-      to: "your@email.com", // بريدك الشخصي لاستقبال الرسائل
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    const response = await resend.emails.send({
+      from: 'mabdelkarimkhalaf777@gmail.com', // استخدم بريدًا مسجلاً في Resend//-
+      to: 'elqanony777@gmail.com',
+      subject: `رسالة جديدة من ${name}`,
       reply_to: email,
-      subject: "رسالة جديدة من نموذج الاتصال",
-      text: `الاسم: ${fullName}\nالهاتف: ${phone}\nالبريد الإلكتروني: ${email}\n\nالرسالة:\n${message}`,
-    };
-
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      },
-      body: JSON.stringify(data),
+      text: `الاسم: ${name}\nالإيميل: ${email}\n\nالرسالة:\n${message}`,
     });
-
-    const result = await response.json();
 
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*", // ✅ حل مشكلة CORS
-      },
-      body: JSON.stringify(result),
+      body: JSON.stringify({ success: true, response }),
     };
   } catch (error) {
-    console.error("Error sending email:", error);
     return {
       statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ error: "Failed to send email" }),
+      body: JSON.stringify({ error: error.message }),
     };
   }
-};
+}
